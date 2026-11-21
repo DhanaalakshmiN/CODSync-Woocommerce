@@ -1,5 +1,5 @@
 app_name = "codsync_woocommerce"
-app_title = "Codsync Woocommerce"
+app_title = "CODSync WooCommerce"
 app_publisher = "Dhanaa lakshhmi"
 app_description = "Cash on delivery ledger for woocommerce"
 app_email = "dhanaalakshmi@agamnxt.com"
@@ -305,3 +305,21 @@ require_type_annotated_api_methods = True
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+
+# Independent backend: the Shopify app is not a dependency.
+required_apps = []
+before_install = "codsync_woocommerce.install.before_install"
+default_log_clearing_doctypes = {"WC Sync Log": 90}
+scheduler_events = {
+	"hourly": [
+		"codsync_woocommerce.codsync_woocommerce.tracking.run_hourly_tracking",
+		"codsync_woocommerce.codsync_woocommerce.engine.run_hourly_settlement_sync",
+		"codsync_woocommerce.codsync_woocommerce.tasks.run_hourly_failure_alert",
+	],
+	"daily": [
+		"codsync_woocommerce.codsync_woocommerce.tasks.run_daily_order_sync",
+		"codsync_woocommerce.codsync_woocommerce.tasks.run_daily_mark_missing",
+		"codsync_woocommerce.codsync_woocommerce.tasks.run_daily_reconciliation",
+		"codsync_woocommerce.codsync_woocommerce.disputes.send_follow_ups",
+	],
+}
